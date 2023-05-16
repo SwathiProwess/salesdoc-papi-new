@@ -40,7 +40,7 @@
 						<connectedAppClientId>${connectedAppClientId}</connectedAppClientId>
 						<connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
-						<applicationName>test4-salesdoc-papi</applicationName>
+						<applicationName>test5-salesdoc-papi</applicationName>
 						<environment>${SBEnv}</environment>
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
