@@ -1,0 +1,16 @@
+{
+  "results":
+    {
+      "salesDocument": "string",
+      "conditionType": "BAAS",
+      "kschL_TEXT": "string",
+      "pdF_B64STR": "string"
+    },
+  "messages": [
+    {
+      "type": "default",
+      "message": "string"
+    }
+  ],
+  "success": true
+}

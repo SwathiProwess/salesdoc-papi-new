@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="sap-salesdoc_output-papi-implSub_Flow" doc:id="69cb03ff-2348-4dd0-94f5-ce54be450547" >
+		<ee:transform doc:name="setInputVariable" doc:id="9e0e4662-f574-47f3-8dd6-ec5a4f35d5f6" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable resource="get-order-log-received.dwl" variableName="inputPayload" />
+				<ee:set-variable variableName="functionModule" ><![CDATA['ZFM_PDF_DOC']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="callToLogRequestReceived" doc:id="994b75d2-0570-48a1-aa86-acf29750fa68" name="mile-log:request-received" />
+		<ee:transform doc:name="transformingRequestJsonToXml" doc:id="dd9c4687-af79-4205-a9a4-06b3dae07bd1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/xml
+---
+{
+"ZFM_PDF_DOC": {
+"import": {
+"I_SALES_DOC_REQ": {
+"SEARCHPARAMS": {
+"SALESDOCUMENT":leftPad(payload.searchparams.salesDocument,10,0),
+"OUTPUTAPPLICATION": payload.searchparams.outputApplication
+},
+"OUTPUT_TYPE": {
+"CONDITIONTYPE": payload.outpuT_TYPE.conditionType,
+"GET_PDF" : payload.outpuT_TYPE.geT_PDF
+}
+}
+}
+}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="callToSapi" doc:id="2ef90afc-0cf9-4ee8-8c99-ac64ab7842ae" config-ref="HTTP_Request_configuration" path="${http.request.path}" sendCorrelationId="ALWAYS" >
+			<http:headers ><![CDATA[#[output application/json
+---
+{
+	"functionModule" : vars.functionModule,
+	"sourceName": app.name
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="transformingResponseXmlToJson" doc:id="f9770d2a-64f4-4207-a5df-e644b871490d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "results": 
+    {
+      "salesDocument": payload.ZFM_PDF_DOC.export.E_OUTPUT.SALESDOCUMENT,
+      "conditionType": payload.ZFM_PDF_DOC.export.E_OUTPUT.CONDITIONTYPE,
+      "kschL_TEXT": payload.ZFM_PDF_DOC.export.E_OUTPUT.KSCHL_TEXT,
+      "pdF_B64STR": payload.ZFM_PDF_DOC.export.E_OUTPUT.PDF_B64STR
+    },
+  "messages": [
+    {
+      "type": "default",
+      "message": "string"
+    }
+  ],
+  "success": true
+}
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="inputPayload" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    correlationId : vars.correlationId,
+    eventTimestamp : now(), 
+    businessProcessName: app.name,
+    flowName: flow.name,   
+    source: p('source'), 
+    target: p('target'), 
+    httpMethod: vars.httpMethod, 
+    message: p('responseMessage')
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="callToLogResponseSent" doc:id="40200a42-5fc6-4957-8c0c-bb10683395d5" name="mile-log:request-sent" />
+	</sub-flow>
+</mule>

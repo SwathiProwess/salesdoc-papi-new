@@ -1,0 +1,28 @@
+#%RAML 1.0
+title: sap-salesdoc_output-papi
+description: This is an Process API which provides tranformations that are required for end system SAP.
+version: v1
+protocols: [HTTP,HTTPS] 
+mediaType: application/json
+types:
+  salesdoc_output_request: !include /dataTypes/salesdoc_output_request.raml
+  salesdoc_output_response: !include /dataTypes/salesdoc_output_response.raml
+  error_response: !include /exchange_modules/45fe9fe3-71e9-4c7f-99b4-aade424656d9/common-fragment/1.0.3/errorFiles/error-dataType.raml
+
+/salesdoc_output:
+  post:
+    body:
+      application/json:
+        type: salesdoc_output_request
+        example: !include /examples/salesdoc_output_request.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: salesdoc_output_response
+            example: !include /examples/salesdoc_output_response.json
+      401:
+        body:
+          application/json:
+            type: error_response
+            example: !include /exchange_modules/45fe9fe3-71e9-4c7f-99b4-aade424656d9/common-fragment/1.0.3/errorFiles/401error-example.json   

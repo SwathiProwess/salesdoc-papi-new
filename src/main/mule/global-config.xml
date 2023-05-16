@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:sap="http://www.mulesoft.org/schema/mule/sap"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:cofww-logger="http://www.mulesoft.org/schema/mule/cofww-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/cofww-logger http://www.mulesoft.org/schema/mule/cofww-logger/current/mule-cofww-logger.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
+
+	<!-- This configuration uses default algorithm (AES) and mode (CBC) -->
+<apikit:config name="sap-salesdoc_output-papi-config" api="sap-salesdoc_output-papi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<configuration-properties
+		doc:name="Application Configuration properties"
+		doc:id="4e9071c0-5800-46f3-8031-b1ae639c2256"
+		file="config/config-${mule.env}.yaml" />
+
+	<configuration-properties
+		doc:name="Common Configuration properties"
+		doc:id="8f0a30ee-8023-4aa2-91a3-c8ab1f805c27"
+		file="config/config-common.yaml" />
+
+	<global-property doc:name="default mule.encryption.key"
+		doc:id="562465a7-8482-41fb-ad41-be913eca44c9"
+		name="mule.key" value="123456789mulesof" />
+
+	<!-- <api-gateway:autodiscovery apiId="${api.id}"
+		doc:name="API Autodiscovery"
+		doc:id="99fac178-73f2-484b-8821-be13d2c2201a" flowRef="iewc-sap-sapi-main"
+		ignoreBasePath="true" /> -->
+
+	<!-- <tls:context name="tls-iewc" doc:name="TLS Context" doc:id="5dd20cd8-d02e-4879-af6b-5737ad42b3e6" >
+	
+	<tls:key-store type="jks" path="${tls.path}" alias="${tls.alias}" keyPassword="${tls.keypassword}" password="${tls.password}" />
+	
+	</tls:context> -->
+<import doc:name="Import" doc:id="c2ed040a-1fd1-48c1-bfca-b570e3a366a7" file="error-handler.xml" doc:description="error-handler.xml"/>
+<import doc:name="Import" doc:id="a5d68790-5d5a-498d-b262-ce6940c54d6c" file="mule-common-logging.xml" doc:description="mule-common-logging.xml"/>
+<import doc:name="Import" doc:id="bb6b2418-0d7f-4090-b80a-ed6ecc60cb2f" file="common-global.xml" doc:description="common-global.xml"/>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1418d3d7-823a-4986-a695-c56dfc9c40e3" responseTimeout="${http.request.timeout}">
+		<http:request-connection host="${http.request.host}" port="${http.request.port}" connectionIdleTimeout="500000">
+			<http:authentication >
+				<http:basic-authentication username="admin" password="admin" />
+			</http:authentication>
+		</http:request-connection>
+		<expiration-policy maxIdleTime="5" timeUnit="MINUTES" />
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7ba8c145-ac20-4e48-9e2b-f9f6f2a0b976" >
+		<http:listener-connection host="${http.listener.host}" port="${http.listener.port}" readTimeout="${http.listener.timeout}"/>
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="1e08e75c-204b-4a56-86b0-fc9d202f741e" name="mule.env" value="local" />
+	
+
+</mule>

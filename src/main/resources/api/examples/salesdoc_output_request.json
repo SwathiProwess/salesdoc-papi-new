@@ -1,0 +1,11 @@
+{
+  "searchparams": {
+    "salesDocument": "string",
+    "outputApplication": "V1"
+  },
+  "outpuT_TYPE":
+    {
+      "conditionType": "BAAS",
+      "geT_PDF": true
+    }
+}

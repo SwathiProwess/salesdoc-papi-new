@@ -1,0 +1,20 @@
+api:
+  autodiscoveryId: "123456"  
+
+http:
+ listener:
+  host: "0.0.0.0"
+  port: "8081"
+  timeout: "30000"
+ request:
+  host: "sb-iewc-sapi.us-e2.cloudhub.io"
+  timeout: "30000"
+  port: ""
+  path: "/api/salesdoc_output" 
+  
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  
+anypoint.platform.client_id: "bd24a77484fe4827a283e40e9fafb02a"
+anypoint.platform.client_secret: "0c6691a2E27042C082029075F93a98dE"

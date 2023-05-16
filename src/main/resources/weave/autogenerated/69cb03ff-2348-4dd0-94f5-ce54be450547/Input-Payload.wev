@@ -1,0 +1,19 @@
+%dw 2.0
+
+type auto_69cb03ff_2348_4dd0_94f5_ce54be450547_Input_Payload = {|
+  ZFM_PDF_DOC: {|
+    "import": {|
+      I_SALES_DOC_REQ: {|
+        SEARCHPARAMS: {|
+          SALESDOCUMENT: String, 
+          OUTPUTAPPLICATION: String
+        |}, 
+        OUTPUT_TYPE: {|
+          CONDITIONTYPE: String, 
+          GET_PDF: Boolean | Null
+        |}
+      |}
+    |}
+  |}
+|}
+

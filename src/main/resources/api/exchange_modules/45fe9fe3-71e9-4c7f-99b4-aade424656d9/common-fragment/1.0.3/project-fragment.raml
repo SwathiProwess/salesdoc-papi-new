@@ -1,0 +1,14 @@
+#%RAML 1.0 ResourceType
+description: This Resource type consists of commonly used error types, parameters and security schemas. 
+
+traits:
+  headerParams: !include /parameters/headerParams.raml
+  queryParams:  !include /parameters/queryParams.raml
+types:
+  error-response: !include /errorFiles/error-dataType.raml
+  
+securitySchemas: 
+    clientPolicy: !include /security/clientEnforcementPolicy.raml
+
+securedBy:
+  -clientPolicy

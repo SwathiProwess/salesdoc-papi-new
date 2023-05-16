@@ -1,0 +1,4 @@
+{
+  "code": 415,
+  "description":"Unsupported Media Type, The media-type in content-type of the request is not supported by the server "
+}

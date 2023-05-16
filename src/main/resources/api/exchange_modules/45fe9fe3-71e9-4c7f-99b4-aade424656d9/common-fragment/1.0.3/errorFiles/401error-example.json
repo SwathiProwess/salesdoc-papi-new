@@ -1,0 +1,4 @@
+{
+  "code": 401,
+  "description":"Unauthorized, API requires credentials to connection"
+}
