@@ -41,7 +41,7 @@
 						<connectedAppClientSecret>${connectedAppClientSecret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
 						<applicationName>test5-salesdoc-papi</applicationName>
-						<environment>${SBEnv}</environment>
+						<environment>${environment}</environment>
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
 						<objectStoreV2>true</objectStoreV2>
